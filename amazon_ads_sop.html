@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>亚马逊FBM服装 · 内部SOP手册</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --border: #e2e0d8;
+    --border-strong: #c8c5b8;
+    --text: #1a1917;
+    --text-2: #5a5750;
+    --text-3: #9a9690;
+    --blue: #1a56db;
+    --blue-bg: #eff4ff;
+    --blue-border: #a4c0f4;
+    --green: #0a7c4e;
+    --green-bg: #ecfdf5;
+    --green-border: #6ee7b7;
+    --amber: #92400e;
+    --amber-bg: #fffbeb;
+    --amber-border: #fcd34d;
+    --red: #991b1b;
+    --red-bg: #fef2f2;
+    --red-border: #fca5a5;
+    --purple: #5b21b6;
+    --purple-bg: #f5f3ff;
+    --purple-border: #c4b5fd;
+    --teal: #0f766e;
+    --teal-bg: #f0fdfa;
+    --teal-border: #99f6e4;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Noto Sans SC', sans-serif;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ── Layout ── */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-logo {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-logo .brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .sidebar-logo .title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  .sidebar-nav { padding: 12px 0; flex: 1; }
+
+  .nav-section { margin-bottom: 4px; }
+  .nav-section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 20px 4px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 20px;
+    color: var(--text-2);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+    cursor: pointer;
+    background: none;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    width: 100%;
+    text-align: left;
+  }
+  .nav-item:hover { color: var(--text); background: var(--bg); }
+  .nav-item.active {
+    color: var(--blue);
+    border-left-color: var(--blue);
+    background: var(--blue-bg);
+  }
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-3);
+    font-family: var(--mono);
+  }
+
+  /* ── Main ── */
+  .main { flex: 1; min-width: 0; }
+
+  /* ── Page header ── */
+  .page-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 40px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .page-header h1 { font-size: 18px; font-weight: 700; }
+  .page-header .meta { font-size: 12px; color: var(--text-3); font-family: var(--mono); }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+  }
+  .badge-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+  .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .badge-amber { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .badge-red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .badge-purple { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+  .badge-teal { background: var(--teal-bg); color: var(--teal); border: 1px solid var(--teal-border); }
+  .badge-gray { background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+
+  /* ── Content ── */
+  .content { padding: 32px 40px 60px; max-width: 960px; }
+
+  /* ── Pages ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 40px; }
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ── Tables ── */
+  .tbl-wrap { overflow-x: auto; margin-bottom: 16px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  th {
+    background: var(--bg);
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--text-2);
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg); }
+
+  /* ── If-Then blocks ── */
+  .ifthen {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .ifthen-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .ifthen-header:hover { background: #efeee9; }
+  .ifthen-title {
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ifthen-chevron {
+    font-size: 12px;
+    color: var(--text-3);
+    transition: transform 0.2s;
+  }
+  .ifthen.open .ifthen-chevron { transform: rotate(180deg); }
+  .ifthen-body { display: none; padding: 20px; }
+  .ifthen.open .ifthen-body { display: block; }
+
+  .formula-block {
+    background: #1a1917;
+    color: #e8e4d9;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.8;
+    margin: 12px 0;
+    white-space: pre-wrap;
+  }
+  .formula-block .kw-if { color: #fbbf24; font-weight: 600; }
+  .formula-block .kw-then { color: #34d399; font-weight: 600; }
+  .formula-block .kw-and { color: #93c5fd; }
+  .formula-block .kw-arrow { color: #f9a8d4; }
+  .formula-block .comment { color: #6b7280; }
+
+  /* ── Alert boxes ── */
+  .alert {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    margin: 12px 0;
+    font-size: 13px;
+  }
+  .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .alert-red { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+  .alert-amber { background: var(--amber-bg); border: 1px solid var(--amber-border); color: var(--amber); }
+  .alert-green { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green); }
+  .alert-blue { background: var(--blue-bg); border: 1px solid var(--blue-border); color: var(--blue); }
+
+  /* ── ACOS meter ── */
+  .acos-scale {
+    display: flex;
+    border-radius: var(--radius);
+    overflow: hidden;
+    height: 36px;
+    margin: 12px 0;
+    font-size: 11px;
+    font-family: var(--mono);
+    font-weight: 600;
+  }
+  .acos-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    color: white;
+    gap: 4px;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+  .seg-great { background: #0a7c4e; }
+  .seg-good  { background: #1a56db; }
+  .seg-warn  { background: #d97706; }
+  .seg-bad   { background: #dc2626; }
+  .seg-stop  { background: #7f1d1d; }
+
+  /* ── Lifecycle timeline ── */
+  .lifecycle {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .lc-card {
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    border: 1px solid transparent;
+  }
+  .lc-card.intro { background: var(--blue-bg); border-color: var(--blue-border); }
+  .lc-card.growth { background: var(--green-bg); border-color: var(--green-border); }
+  .lc-card.mature { background: var(--amber-bg); border-color: var(--amber-border); }
+  .lc-card.decline { background: var(--red-bg); border-color: var(--red-border); }
+  .lc-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .lc-intro .lc-title { color: var(--blue); }
+  .lc-growth .lc-title { color: var(--green); }
+  .lc-mature .lc-title { color: var(--amber); }
+  .lc-decline .lc-title { color: var(--red); }
+  .lc-card.intro .lc-title { color: var(--blue); }
+  .lc-card.growth .lc-title { color: var(--green); }
+  .lc-card.mature .lc-title { color: var(--amber); }
+  .lc-card.decline .lc-title { color: var(--red); }
+  .lc-item { font-size: 12px; color: var(--text-2); margin-bottom: 4px; display: flex; gap: 6px; }
+  .lc-item::before { content: '—'; flex-shrink: 0; color: var(--text-3); }
+
+  /* ── Quadrant grid ── */
+  .quadrant-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .q-card {
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    border: 1px solid transparent;
+  }
+  .q-card.q1 { background: var(--green-bg); border-color: var(--green-border); }
+  .q-card.q2 { background: var(--amber-bg); border-color: var(--amber-border); }
+  .q-card.q3 { background: var(--amber-bg); border-color: var(--amber-border); }
+  .q-card.q4 { background: var(--red-bg); border-color: var(--red-border); }
+  .q-label { font-size: 11px; font-family: var(--mono); font-weight: 600; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .q1 .q-label { color: var(--green); }
+  .q2 .q-label { color: var(--amber); }
+  .q3 .q-label { color: var(--amber); }
+  .q4 .q-label { color: var(--red); }
+  .q-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .q-desc { font-size: 12px; color: var(--text-2); line-height: 1.6; }
+  .q-action { margin-top: 10px; font-size: 12px; font-weight: 600; }
+  .q1 .q-action { color: var(--green); }
+  .q2 .q-action { color: var(--amber); }
+  .q3 .q-action { color: var(--amber); }
+  .q4 .q-action { color: var(--red); }
+
+  /* ── Checklist ── */
+  .checklist { list-style: none; margin: 8px 0; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 5px 0;
+    font-size: 13px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before {
+    content: '□';
+    font-family: var(--mono);
+    color: var(--text-3);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── Calendar ── */
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .cal-month {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+  }
+  .cal-month-name {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-3);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .cal-items { display: flex; flex-direction: column; gap: 4px; }
+  .cal-item {
+    font-size: 11px;
+    padding: 3px 7px;
+    border-radius: 4px;
+    line-height: 1.4;
+  }
+  .cal-item.eu { background: var(--blue-bg); color: var(--blue); }
+  .cal-item.us { background: var(--purple-bg); color: var(--purple); }
+  .cal-item.both { background: var(--green-bg); color: var(--green); }
+  .cal-item.hot { background: var(--red-bg); color: var(--red); font-weight: 600; }
+
+  /* ── Xnurta rules table ── */
+  .rule-row { display: grid; grid-template-columns: 60px 1fr 1fr auto; gap: 0; border-bottom: 1px solid var(--border); }
+  .rule-row:last-child { border-bottom: none; }
+  .rule-cell { padding: 10px 14px; font-size: 12px; }
+  .rule-id { font-family: var(--mono); font-weight: 600; color: var(--text-3); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+  /* ── Search bar ── */
+  .search-wrap { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .search-input {
+    width: 100%;
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 12px;
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+  }
+  .search-input:focus { border-color: var(--blue); background: var(--surface); }
+
+  /* ── Stat row ── */
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-value { font-size: 24px; font-weight: 700; font-family: var(--mono); }
+  .stat-label { font-size: 11px; color: var(--text-3); margin-top: 4px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .content { padding: 20px 16px 40px; }
+    .page-header { padding: 16px 20px; }
+    .lifecycle { grid-template-columns: 1fr 1fr; }
+    .cal-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+    .quadrant-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="brand">Internal SOP · v2025</div>
+      <div class="title">亚马逊FBM服装<br>运营操作手册</div>
+    </div>
+    <div class="search-wrap">
+      <input class="search-input" placeholder="搜索模块..." id="searchInput" oninput="filterNav(this.value)">
+    </div>
+    <div class="sidebar-nav" id="sidebarNav">
+      <div class="nav-section">
+        <div class="nav-section-label">总览</div>
+        <button class="nav-item active" onclick="showPage('home')">
+          <span class="nav-dot" style="background:#1a56db"></span>首页 · 快速导航
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Module 1</div>
+        <button class="nav-item" onclick="showPage('m1-calendar')">
+          <span class="nav-dot" style="background:#0a7c4e"></span>服装全景日历
+        </button>
+        <button class="nav-item" onclick="showPage('m1-lifecycle')">
+          <span class="nav-dot" style="background:#0a7c4e"></span>产品生命周期
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Module 2</div>
+        <button class="nav-item" onclick="showPage('m2-structure')">
+          <span class="nav-dot" style="background:#1a56db"></span>广告三层结构
+        </button>
+        <button class="nav-item" onclick="showPage('m2-phases')">
+          <span class="nav-dot" style="background:#1a56db"></span>阶段性广告打法
+        </button>
+        <button class="nav-item" onclick="showPage('m2-festival')">
+          <span class="nav-dot" style="background:#1a56db"></span>节日节点操作
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Module 3</div>
+        <button class="nav-item" onclick="showPage('m3-definition')">
+          <span class="nav-dot" style="background:#d97706"></span>好坏广告定义
+        </button>
+        <button class="nav-item" onclick="showPage('m3-acos')">
+          <span class="nav-dot" style="background:#d97706"></span>ACOS / ROAS参考线
+        </button>
+        <button class="nav-item" onclick="showPage('m3-quadrant')">
+          <span class="nav-dot" style="background:#d97706"></span>四象限评估模型
+        </button>
+        <button class="nav-item" onclick="showPage('m3-inspection')">
+          <span class="nav-dot" style="background:#d97706"></span>周度巡检SOP
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Module 4</div>
+        <button class="nav-item" onclick="showPage('m4-index')">
+          <span class="nav-dot" style="background:#dc2626"></span>病态场景索引
+        </button>
+        <button class="nav-item" onclick="showPage('m4-ifthen')">
+          <span class="nav-dot" style="background:#dc2626"></span>If-Then公式库
+        </button>
+        <button class="nav-item" onclick="showPage('m4-xnurta')">
+          <span class="nav-dot" style="background:#dc2626"></span>Xnurta规则配置
+        </button>
+        <button class="nav-item" onclick="showPage('m4-log')">
+          <span class="nav-dot" style="background:#dc2626"></span>操作日志模板
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-footer">欧洲站 + 美国站 · FBM铺货模式<br>禁止对外传播</div>
+  </nav>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="page-header">
+      <h1 id="pageTitle">首页 · 快速导航</h1>
+      <span class="meta" id="pageTag">亚马逊FBM服装SOP · 2025</span>
+    </div>
+    <div class="content">
+
+      <!-- ══ HOME ══ -->
+      <div class="page active" id="page-home">
+        <div class="alert alert-red">
+          <span class="alert-icon">⚑</span>
+          <div><strong>执行纪律</strong>：所有止损动作在触发条件满足后必须在规定时限内完成。"再观察几天"不是理由，拖延即失职。</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-card"><div class="stat-value" style="color:var(--blue)">4</div><div class="stat-label">核心SOP模块</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--green)">12</div><div class="stat-label">月份品类日历</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--amber)">12</div><div class="stat-label">病态场景If-Then</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--red)">8</div><div class="stat-label">Xnurta自动化规则</div></div>
+        </div>
+        <div class="section">
+          <div class="section-title">快速入口</div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+            <div class="card" style="cursor:pointer;border-left:3px solid var(--green)" onclick="showPage('m1-calendar')">
+              <div class="card-title"><span class="badge badge-green">M1</span>服装全景日历</div>
+              <div style="font-size:12px;color:var(--text-2)">欧洲+美国 1-12月品类上架节点、爆发时间窗口</div>
+            </div>
+            <div class="card" style="cursor:pointer;border-left:3px solid var(--blue)" onclick="showPage('m2-phases')">
+              <div class="card-title"><span class="badge badge-blue">M2</span>阶段性广告打法</div>
+              <div style="font-size:12px;color:var(--text-2)">导入/成长/成熟/衰退期的竞价、预算、词策略</div>
+            </div>
+            <div class="card" style="cursor:pointer;border-left:3px solid var(--amber)" onclick="showPage('m3-quadrant')">
+              <div class="card-title"><span class="badge badge-amber">M3</span>四象限评估模型</div>
+              <div style="font-size:12px;color:var(--text-2)">CTR × CVR 分类，ACOS/ROAS双指标参考线</div>
+            </div>
+            <div class="card" style="cursor:pointer;border-left:3px solid var(--red)" onclick="showPage('m4-ifthen')">
+              <div class="card-title"><span class="badge badge-red">M4</span>If-Then公式库</div>
+              <div style="font-size:12px;color:var(--text-2)">12种病态场景，触发即执行，覆盖欧美双站</div>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">本周执行检查清单</div>
+          <div class="card">
+            <ul class="checklist">
+              <li>下载过去7天「搜索词报告」+「广告活动报告」</li>
+              <li>Xnurta导出各ASIN广告组 ACOS/ROAS/花费/转化 汇总</li>
+              <li>按CTR/CVR将活跃广告组分入四象限Q1-Q4</li>
+              <li>对所有Q4组评分 ≤ 3分的：当天处理</li>
+              <li>对所有Q3组：查词义偏移，执行否词操作</li>
+              <li>对Q1组：提竞价+提预算，记录操作日志</li>
+              <li>检查本周是否有节日节点（对照M1日历）</li>
+              <li>所有调整填写操作日志，指定复查日期</li>
+            </ul>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">核心止损红线速查</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>场景</th><th>欧洲站触发线</th><th>美国站触发线</th><th>时限</th><th>动作</th></tr>
+            <tr><td>高花费零转化</td><td>花费 &gt; $12，转化=0</td><td>花费 &gt; $18，转化=0</td><td><span class="badge badge-red">24h</span></td><td>暂停/否词</td></tr>
+            <tr><td>ACOS强制止损</td><td>ACOS &gt; 60%</td><td>ACOS &gt; 55%</td><td><span class="badge badge-red">当天</span></td><td>立即停投</td></tr>
+            <tr><td>导入期止损</td><td>10天花费 &gt; $50 且0转化</td><td>10天花费 &gt; $70 且0转化</td><td><span class="badge badge-red">即时</span></td><td>停广告审Listing</td></tr>
+            <tr><td>衰退期止损</td><td>连续7天日销&lt;1件</td><td>连续5天日销&lt;1件</td><td><span class="badge badge-amber">48h</span></td><td>全停广告</td></tr>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- ══ M1 CALENDAR ══ -->
+      <div class="page" id="page-m1-calendar">
+        <div class="alert alert-blue"><span class="alert-icon">ℹ</span><div>FBM上架截止线 = 含拍照/Listing优化/广告组搭建全部完成的日期。晚于此日期将错过该节点完整流量窗口。</div></div>
+        <div class="section">
+          <div class="section-title">欧洲站 + 美国站 · 12月全景品类日历</div>
+          <div class="cal-grid">
+            <div class="cal-month"><div class="cal-month-name">1月</div><div class="cal-items">
+              <div class="cal-item eu">🇪🇺 保暖内衣·居家服</div>
+              <div class="cal-item us">🇺🇸 健身服·运动装</div>
+              <div class="cal-item both">元旦促销尾声</div>
+            </div></div>
+            <div class="cal-month"><div class="cal-month-name">2月</div><div class="cal-items">
+              <div class="cal-item hot">💝 情人节（2/14）</div>
+              <div class="cal-item eu">🇪🇺 蕾丝·丝绒睡衣</div>
+              <div class="cal-item us">🇺🇸 超级碗·球队服</div>
+              <div class="cal-item both">截止：1/25</div>
+            </div></div>
+            <div class="cal-month"><div class="cal-month-name">3月</div><div class="cal-items">
+              <div class="cal-item eu">🇪🇺 风衣·春季连衣裙</div>
+              <div class="cal-item us">🇺🇸 春季爆发</div>
+              <div class="cal-item both">复活节预热</div>
+              <div class="cal-item both">截止：2/20</div>
+            </div></div>
+            <div class="cal-month"><div class="cal-month-name">4月</div><div class="cal-items">
+              <div class="cal-item hot">🇪🇺 复活节⚡</div>
+              <div class="cal-item eu">🇪🇺 春季连衣裙爆发</div>
+              <div class="cal-item us">🇺🇸 泳装预热</div>
+              <div class="cal-item both">截止：3/15</div>
+            </div></div>
+            <div class="cal-month"><div class="cal-month-name">5月</div><div class="cal-items">
+              <div class="cal-item hot">🇺🇸 母亲节⚡⚡</div>
+              <div class="cal-item eu">🇪🇺 夏品起量</div>
+              <div class="cal-item us">🇺🇸 泳装·毕业季</div>
+              <div class="cal-item both">截止：4/10</div>
+            </div></div>
+            <div class="cal-month"><div class="cal-month-name">6月</div><div class="cal-items">
+              <div class="cal-item hot">🇺🇸 父亲节⚡</div>
+              <div class="cal-item eu">🇪🇺 夏品全线爆发</div>
+              <div class="cal-item us">🇺🇸 夏品+泳装顶峰</div>
+              <div class="cal-item both">Prime Day备货启动</div>
+            </div></div>
+            <div class="cal-month"><div class="cal-month-name">7月</div><div class="cal-items">
+              <div class="cal-item hot">⚡⚡ Prime Day</div>
+              <div class="cal-item us">🇺🇸 独立日（7/4）</div>
+              <div class="cal-item eu">🇪🇺 夏品巅峰</div>
+              <div class="cal-item both">截止：6/1</div>
+            </div></div>
+            <div class="cal-month"><div class="cal-month-name">8月</div><div class="cal-items">
+              <div class="cal-item hot">🇺🇸 返校季⚡⚡</div>
+              <div class="cal-item us">🇺🇸 校服·运动服</div>
+              <div class="cal-item eu">🇪🇺 夏末+秋预热</div>
+              <div class="cal-item both">截止：7/10</div>
+            </div></div>
+            <div class="cal-month"><div class="cal-month-name">9月</div><div class="cal-items">
+              <div class="cal-item hot">🇪🇺 秋季大换季⚡</div>
+              <div class="cal-item us">🇺🇸 Labor Day促销</div>
+              <div class="cal-item eu">🇪🇺 风衣·牛仔·针织</div>
+              <div class="cal-item both">截止：8/15</div>
+            </div></div>
+            <div class="cal-month"><div class="cal-month-name">10月</div><div class="cal-items">
+              <div class="cal-item hot">🇺🇸 万圣节⚡⚡</div>
+              <div class="cal-item eu">🇪🇺 厚外套·毛衣</div>
+              <div class="cal-item us">🇺🇸 万圣节服装爆发</div>
+              <div class="cal-item both">截止：9/20</div>
+            </div></div>
+            <div class="cal-month"><div class="cal-month-name">11月</div><div class="cal-items">
+              <div class="cal-item hot">⚡⚡ Black Friday</div>
+              <div class="cal-item us">🇺🇸 感恩节家庭装</div>
+              <div class="cal-item eu">🇪🇺 冬品冲顶</div>
+              <div class="cal-item both">截止：10/15</div>
+            </div></div>
+            <div class="cal-month"><div class="cal-month-name">12月</div><div class="cal-items">
+              <div class="cal-item hot">⚡⚡ 圣诞季</div>
+              <div class="cal-item us">🇺🇸 亲子装·睡衣套</div>
+              <div class="cal-item eu">🇪🇺 派对装·礼品服</div>
+              <div class="cal-item both">截止：11/10</div>
+            </div></div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">南北欧 + 美国地区差异</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>维度</th><th>北欧/英德（UK/DE/FR）</th><th>南欧（IT/ES）</th><th>美国东北部</th><th>美国南部/西海岸</th></tr>
+            <tr><td>冬季起止</td><td>10月上旬 ～ 3月下旬</td><td>11月中旬 ～ 2月下旬</td><td>10月中旬 ～ 3月中旬</td><td>11月 ～ 2月（温和）</td></tr>
+            <tr><td>夏季起止</td><td>6月 ～ 8月</td><td>5月 ～ 9月</td><td>6月 ～ 8月</td><td>4月 ～ 10月（极长）</td></tr>
+            <tr><td>泳装旺季</td><td>6-7月</td><td>5-8月</td><td>6-7月</td><td>4-9月</td></tr>
+            <tr><td>厚外套起量</td><td>10月</td><td>11月</td><td>10月</td><td>11-12月</td></tr>
+            <tr><td>FBM策略</td><td>优先验证市场</td><td>延迟3-4周跟进</td><td>对标北欧节奏</td><td>对标南欧，夏品更长</td></tr>
+          </table></div>
+        </div>
+        <div class="section">
+          <div class="section-title">美国站专属高价值品类</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>品类</th><th>旺季窗口</th><th>特别注意</th></tr>
+            <tr><td><span class="badge badge-red">高优</span> 万圣节服装</td><td>9月中 ～ 10月31日</td><td>体量远超欧洲，需独立Campaign</td></tr>
+            <tr><td><span class="badge badge-red">高优</span> 返校季服装</td><td>7月下旬 ～ 8月底</td><td>K-12学生为主，运动服/校服集中</td></tr>
+            <tr><td><span class="badge badge-blue">中优</span> 家庭亲子装</td><td>11月 ～ 12月</td><td>感恩节/圣诞节美国独有大品类</td></tr>
+            <tr><td><span class="badge badge-blue">中优</span> Plus Size</td><td>全年</td><td>美国需求占比20%+，欧洲相对弱</td></tr>
+            <tr><td><span class="badge badge-gray">季节</span> 爱国主题</td><td>6月下旬 ～ 7月4日</td><td>独立日前后，国旗元素集中爆发</td></tr>
+            <tr><td><span class="badge badge-gray">季节</span> 毕业季服装</td><td>4月 ～ 6月</td><td>正装/礼服/派对服，欧洲无对应</td></tr>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- ══ M1 LIFECYCLE ══ -->
+      <div class="page" id="page-m1-lifecycle">
+        <div class="section">
+          <div class="section-title">产品生命周期四阶段定义</div>
+          <div class="lifecycle">
+            <div class="lc-card intro">
+              <div class="lc-title">🔵 导入期</div>
+              <div class="lc-item">上架第1-3周</div>
+              <div class="lc-item">自然流量接近0</div>
+              <div class="lc-item">轻仓测试：15-30件（EU）</div>
+              <div class="lc-item">20-40件（US）</div>
+              <div class="lc-item" style="color:var(--red);font-weight:600">10天0转化+$15花费→停</div>
+            </div>
+            <div class="lc-card growth">
+              <div class="lc-title">🟢 成长期</div>
+              <div class="lc-item">上架第4-8周</div>
+              <div class="lc-item">自然+付费并行</div>
+              <div class="lc-item">补仓：日销×21天+7天缓冲</div>
+              <div class="lc-item">周销量环比增长&gt;20%</div>
+              <div class="lc-item" style="color:var(--red);font-weight:600">ACOS&gt;45%连续2周→冻结</div>
+            </div>
+            <div class="lc-card mature">
+              <div class="lc-title">🟡 成熟期</div>
+              <div class="lc-item">季中高峰</div>
+              <div class="lc-item">自然流量占比&gt;40%</div>
+              <div class="lc-item">广告转防御为主</div>
+              <div class="lc-item">精细补货×1.3系数</div>
+              <div class="lc-item" style="color:var(--red);font-weight:600">周销连续2周下降&gt;15%→预警</div>
+            </div>
+            <div class="lc-card decline">
+              <div class="lc-title">🔴 衰退期</div>
+              <div class="lc-item">末季/清仓</div>
+              <div class="lc-item">大幅削减广告预算</div>
+              <div class="lc-item">每周降价5-8%清库存</div>
+              <div class="lc-item">停广告保自然</div>
+              <div class="lc-item" style="color:var(--red);font-weight:600">日销&lt;1件+ACOS&gt;60%→全停</div>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">欧美双站阶段参数对照</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>维度</th><th>导入期</th><th>成长期</th><th>成熟期</th><th>衰退期</th></tr>
+            <tr><td><strong>EU ACOS目标</strong></td><td>不设目标</td><td>&lt; 35%</td><td>&lt; 25%</td><td>&lt; 25%</td></tr>
+            <tr><td><strong>US ACOS目标</strong></td><td>不设目标</td><td>&lt; 30%</td><td>&lt; 22%</td><td>&lt; 20%</td></tr>
+            <tr><td><strong>EU 止损线</strong></td><td>$15/10天</td><td>45% 连续2周</td><td>40%</td><td>60%</td></tr>
+            <tr><td><strong>US 止损线</strong></td><td>$20/10天</td><td>40% 连续2周</td><td>35%</td><td>55%</td></tr>
+            <tr><td><strong>备货逻辑</strong></td><td>轻仓15-40件</td><td>日销×21+7缓冲</td><td>实际销速×1.3</td><td>停止补货</td></tr>
+            <tr><td><strong>竞价策略</strong></td><td>固定竞价</td><td>动态-仅降低</td><td>动态-升降</td><td>固定低竞价</td></tr>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- ══ M2 STRUCTURE ══ -->
+      <div class="page" id="page-m2-structure">
+        <div class="alert alert-red"><span class="alert-icon">⚑</span><div><strong>铁律</strong>：不同生命周期 ASIN 必须在独立 Campaign 下运行，禁止预算互吃。</div></div>
+        <div class="section">
+          <div class="section-title">广告账户三层结构</div>
+          <div class="card" style="border-left:3px solid var(--blue)">
+            <div class="card-title"><span class="badge badge-blue">第一层</span>广告活动（Campaign）— 预算闸门</div>
+            <div style="font-size:13px;color:var(--text-2)">控制每日总预算上限 · 区分品类/生命周期阶段 · 禁止跨生命周期混投</div>
+          </div>
+          <div class="card" style="border-left:3px solid var(--teal)">
+            <div class="card-title"><span class="badge badge-teal">第二层</span>广告组（Ad Group）— 词类隔离</div>
+            <div style="font-size:13px;color:var(--text-2)">自动词组 · 长尾精准词组 · 核心竞争词组 · 竞品词组 — 各自独立，禁止混投</div>
+          </div>
+          <div class="card" style="border-left:3px solid var(--amber)">
+            <div class="card-title"><span class="badge badge-amber">第三层</span>广告创意（Ad）— 落地页与素材</div>
+            <div style="font-size:13px;color:var(--text-2)">主图/A+/价格锚点与广告词匹配 · 禁止一图多变体混测</div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">导入期广告组配置</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>广告组名称</th><th>类型</th><th>匹配方式</th><th>初始竞价（EU）</th><th>初始竞价（US）</th><th>预算占比</th></tr>
+            <tr><td><code>[ASIN]_AUTO_探索</code></td><td>SP自动</td><td>紧密+同类</td><td>建议×0.8</td><td>建议×0.85</td><td><strong>50%</strong></td></tr>
+            <tr><td><code>[ASIN]_LONG_长尾精准</code></td><td>SP手动</td><td>精确匹配</td><td>建议×0.7</td><td>建议×0.75</td><td><strong>35%</strong></td></tr>
+            <tr><td><code>[ASIN]_CAT_品类词</code></td><td>SP手动</td><td>词组匹配</td><td>建议×0.6</td><td>建议×0.65</td><td><strong>15%</strong></td></tr>
+          </table></div>
+          <div class="alert alert-amber"><span class="alert-icon">!</span><div>导入期禁止开启宽泛匹配，禁止开品牌词/竞品词组，否则预算将被无关流量吞噬。</div></div>
+        </div>
+        <div class="section">
+          <div class="section-title">成长期扩展广告组</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>新增广告组</th><th>类型</th><th>初始竞价</th><th>预算占比</th></tr>
+            <tr><td><code>[ASIN]_CORE_核心词</code></td><td>SP手动精确</td><td>建议×1.0-1.1</td><td>35%</td></tr>
+            <tr><td><code>[ASIN]_COMP_竞品定向</code></td><td>SP商品投放</td><td>竞品单价×0.8</td><td>8%（可随时砍）</td></tr>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- ══ M2 PHASES ══ -->
+      <div class="page" id="page-m2-phases">
+        <div class="section">
+          <div class="section-title">四阶段广告核心参数速查</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>阶段</th><th>竞价策略</th><th>首页溢价</th><th>预算方向</th><th>ACOS目标（EU）</th><th>ACOS目标（US）</th><th>止损线</th></tr>
+            <tr><td><span class="badge badge-blue">导入期</span></td><td>固定竞价</td><td>0%</td><td>封顶严控 $5-12/天</td><td>不设目标</td><td>不设目标</td><td>$50/10天</td></tr>
+            <tr><td><span class="badge badge-green">成长期</span></td><td>动态-仅降低</td><td>+20-30%</td><td>周销+20%→预算+30%</td><td>&lt; 35%</td><td>&lt; 30%</td><td>EU45% / US40%</td></tr>
+            <tr><td><span class="badge badge-amber">成熟期</span></td><td>动态-升降</td><td>+40-50%</td><td>防御为主，砍低效词</td><td>&lt; 25%</td><td>&lt; 22%</td><td>EU40% / US35%</td></tr>
+            <tr><td><span class="badge badge-red">衰退期</span></td><td>固定低竞价</td><td>0%</td><td>三步收缩至清零</td><td>&lt; 25%</td><td>&lt; 20%</td><td>EU60% / US55%</td></tr>
+          </table></div>
+        </div>
+        <div class="section">
+          <div class="section-title">成长期竞价调整规则</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>条件</th><th>动作</th><th>频率</th></tr>
+            <tr><td>某词7天 ACOS &lt; 20% + 转化 ≥ 3单</td><td><span class="badge badge-green">提价 15-20%</span></td><td>每周一次</td></tr>
+            <tr><td>某词7天 ACOS 20-35% + 转化 ≥ 2单</td><td><span class="badge badge-gray">维持不动</span></td><td>观察</td></tr>
+            <tr><td>某词7天 ACOS &gt; 45% + 转化 ≤ 1单</td><td><span class="badge badge-amber">降价 20%</span></td><td>每周一次</td></tr>
+            <tr><td>某词7天 花费 &gt; $8 + 0 转化</td><td><span class="badge badge-red">立即否定或暂停</span></td><td>实时</td></tr>
+            <tr><td>周销量环比增长 &gt; 20%</td><td><span class="badge badge-green">Campaign预算+30%</span></td><td>触发即执行</td></tr>
+          </table></div>
+        </div>
+        <div class="section">
+          <div class="section-title">衰退期三步收缩公式</div>
+          <div class="card">
+            <div class="card-title">第1步：销量下滑信号出现</div>
+            <div class="formula-block"><span class="kw-if">IF</span> 周销量连续下降 &gt; 15%
+<span class="kw-then">THEN</span> <span class="kw-arrow">→</span> 暂停竞品定向组 + 自动广告组
+     <span class="kw-arrow">→</span> 预算整体削减 50%
+     <span class="kw-arrow">→</span> 仅保留 ACOS &lt; 25% 的精准词组</div>
+            <div class="card-title" style="margin-top:16px">第2步：连续5天日销 &lt; 2件</div>
+            <div class="formula-block"><span class="kw-then">THEN</span> <span class="kw-arrow">→</span> 暂停所有手动词组，仅保留1个自动广告（$3/天）
+     <span class="kw-arrow">→</span> 启动 Coupon 5-8% 配合广告做最后冲量</div>
+            <div class="card-title" style="margin-top:16px">第3步：连续7天日销 &lt; 1件</div>
+            <div class="formula-block"><span class="kw-then">THEN</span> <span class="kw-arrow">→</span> 全面停止广告投入
+     <span class="kw-arrow">→</span> 价格每周下调 5-8% 直至清空
+     <span class="kw-arrow">→</span> 归档数据，作为下季选品参考</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ M2 FESTIVAL ══ -->
+      <div class="page" id="page-m2-festival">
+        <div class="alert alert-red"><span class="alert-icon">⚑</span><div>节日断投即断销，无二次机会。节日当天每4小时检查预算消耗，防止高效Campaign断投。</div></div>
+        <div class="section">
+          <div class="section-title">节日节点操作规程</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>时间节点</th><th>操作动作</th><th>说明</th></tr>
+            <tr><td><span class="badge badge-blue">节前14天</span></td><td>高效词竞价+20-30%，预算上限+50%</td><td>提前卡位，避免节日当天竞价暴涨</td></tr>
+            <tr><td><span class="badge badge-blue">节前7天</span></td><td>开启SP品牌词防御组</td><td>节日期间竞品广告侵略性最强</td></tr>
+            <tr><td><span class="badge badge-red">节日当天</span></td><td>每4小时检查预算消耗</td><td>断投即断销，节日无二次机会</td></tr>
+            <tr><td><span class="badge badge-amber">节后48h</span></td><td>竞价降回原值，预算恢复常规</td><td>节后流量骤降，维持高竞价只烧钱</td></tr>
+            <tr><td><span class="badge badge-gray">节后7天</span></td><td>全量搜索词报告否词</td><td>节日流量复杂，无关词大量涌入</td></tr>
+          </table></div>
+        </div>
+        <div class="section">
+          <div class="section-title">全年顶级节点日历</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>节日</th><th>站点</th><th>备货截止</th><th>广告预热开始</th><th>危险等级</th></tr>
+            <tr><td>情人节（2/14）</td><td>EU + US</td><td>1月25日</td><td>2月1日</td><td><span class="badge badge-amber">⚡ 中</span></td></tr>
+            <tr><td>超级碗（2月初）</td><td>🇺🇸 US</td><td>1月20日</td><td>1月28日</td><td><span class="badge badge-amber">⚡ 中</span></td></tr>
+            <tr><td>复活节</td><td>🇪🇺 EU</td><td>3月15日</td><td>3月25日</td><td><span class="badge badge-amber">⚡ 中</span></td></tr>
+            <tr><td>母亲节（5月）</td><td>🇺🇸 US为主</td><td>4月10日</td><td>4月20日</td><td><span class="badge badge-red">⚡⚡ 高</span></td></tr>
+            <tr><td>Prime Day（7月）</td><td>EU + US</td><td>6月1日</td><td>6月15日</td><td><span class="badge badge-red">⚡⚡ 最高</span></td></tr>
+            <tr><td>返校季（8月）</td><td>🇺🇸 US</td><td>7月10日</td><td>7月20日</td><td><span class="badge badge-red">⚡⚡ 高</span></td></tr>
+            <tr><td>万圣节（10/31）</td><td>🇺🇸 US为主</td><td>9月20日</td><td>9月15日</td><td><span class="badge badge-red">⚡⚡ 最高</span></td></tr>
+            <tr><td>Black Friday</td><td>EU + US</td><td>10月15日</td><td>11月1日</td><td><span class="badge badge-red">⚡⚡ 最高</span></td></tr>
+            <tr><td>圣诞季</td><td>EU + US</td><td>11月10日</td><td>11月15日</td><td><span class="badge badge-red">⚡⚡ 最高</span></td></tr>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- ══ M3 DEFINITION ══ -->
+      <div class="page" id="page-m3-definition">
+        <div class="section">
+          <div class="section-title">好广告 vs 坏广告定义</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="card" style="border-color:var(--green-border);background:var(--green-bg)">
+              <div class="card-title" style="color:var(--green)">✓ 好广告（可持续投入）</div>
+              <ul style="list-style:none;font-size:13px;color:var(--text-2)">
+                <li style="padding:4px 0;border-bottom:1px solid var(--green-border)">每一次点击都在目标受众内</li>
+                <li style="padding:4px 0;border-bottom:1px solid var(--green-border)">ACOS 持续低于品类盈亏平衡线</li>
+                <li style="padding:4px 0;border-bottom:1px solid var(--green-border)">自然排名因广告助推持续上升</li>
+                <li style="padding:4px 0">花费可被当周销售额覆盖并盈利</li>
+              </ul>
+            </div>
+            <div class="card" style="border-color:var(--red-border);background:var(--red-bg)">
+              <div class="card-title" style="color:var(--red)">✗ 坏广告（48小时内处理）</div>
+              <ul style="list-style:none;font-size:13px;color:var(--text-2)">
+                <li style="padding:4px 0;border-bottom:1px solid var(--red-border)">靠宽泛词买流量，买家不匹配</li>
+                <li style="padding:4px 0;border-bottom:1px solid var(--red-border)">ACOS 长期超标却未触发止损</li>
+                <li style="padding:4px 0;border-bottom:1px solid var(--red-border)">花费高但自然排名无任何改善</li>
+                <li style="padding:4px 0">靠持续砸钱维持表面销量数字</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">三维度评估基准</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>维度</th><th>高（健康）</th><th>中（正常）</th><th>低（警戒）</th><th>常见原因</th></tr>
+            <tr><td><strong>曝光量（7天）</strong></td><td>&gt; 5,000</td><td>1,000-5,000</td><td>&lt; 1,000</td><td>竞价过低 / 词搜量低 / 账号限流</td></tr>
+            <tr><td><strong>CTR</strong></td><td>&gt; 0.5%</td><td>0.3%-0.5%</td><td>&lt; 0.3%</td><td>主图弱 / 价格偏高 / 词义不符</td></tr>
+            <tr><td><strong>CVR（FBM服装）</strong></td><td>&gt; 8%</td><td>3%-8%</td><td>&lt; 3%</td><td>Review少 / 无A+ / 尺码表缺失</td></tr>
+          </table></div>
+          <div class="alert alert-amber"><span class="alert-icon">!</span><div>FBM服装转化率天然低于FBA约1-2个百分点（无Prime标志）。定价须补偿这一转化劣势，建议比FBA竞品低10-15%。</div></div>
+        </div>
+      </div>
+
+      <!-- ══ M3 ACOS ══ -->
+      <div class="page" id="page-m3-acos">
+        <div class="section">
+          <div class="section-title">ACOS / ROAS 核心参考线</div>
+          <div class="acos-scale">
+            <div class="acos-seg seg-great"><span>&lt;20%</span><span>优质</span></div>
+            <div class="acos-seg seg-good"><span>20-30%</span><span>健康</span></div>
+            <div class="acos-seg seg-warn"><span>30-40%</span><span>警戒</span></div>
+            <div class="acos-seg seg-bad"><span>40-55%</span><span>亏损</span></div>
+            <div class="acos-seg seg-stop"><span>&gt;55%</span><span>止损</span></div>
+          </div>
+          <div class="tbl-wrap"><table>
+            <tr><th>评级</th><th>ACOS区间</th><th>ROAS区间</th><th>含义</th><th>执行动作</th></tr>
+            <tr><td><span class="badge badge-green">优质</span></td><td>&lt; 20%</td><td>&gt; 5.0</td><td>超额盈利，效率极高</td><td>提预算+提竞价，加速放量</td></tr>
+            <tr><td><span class="badge badge-blue">健康</span></td><td>20% - 30%</td><td>3.3 - 5.0</td><td>正常盈利区间</td><td>维持现状，小幅优化</td></tr>
+            <tr><td><span class="badge badge-amber">警戒</span></td><td>30% - 40%</td><td>2.5 - 3.3</td><td>接近盈亏平衡</td><td>每周必须审查，找拖累词</td></tr>
+            <tr><td><span class="badge badge-red">亏损</span></td><td>40% - 55%</td><td>1.8 - 2.5</td><td>广告在亏本拉流量</td><td>72小时内降价/否词/砍预算</td></tr>
+            <tr><td><span class="badge badge-red">止损</span></td><td>&gt; 55%</td><td>&lt; 1.8</td><td>严重失控</td><td><strong>立即暂停，不得拖延</strong></td></tr>
+          </table></div>
+          <div class="alert alert-blue"><span class="alert-icon">ℹ</span><div><strong>美国站参考线整体收紧5%</strong>：优质线 &lt; 18%，健康线 18-25%，止损线 &gt; 50%。原因：US CPC更高，FBM转化率天然低于FBA，相同ACOS下实际利润更薄。</div></div>
+        </div>
+        <div class="section">
+          <div class="section-title">ACOS/ROAS 联合判断场景</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>场景</th><th>ACOS</th><th>ROAS</th><th>真实含义</th><th>正确动作</th></tr>
+            <tr><td>真实优质</td><td>15%</td><td>6.7</td><td>确认盈利，高效</td><td><span class="badge badge-green">加码放量</span></td></tr>
+            <tr><td>假性健康</td><td>22%</td><td>4.5</td><td>ACOS达标但销售额极低（分母小）</td><td><span class="badge badge-amber">查曝光，提竞价跑量</span></td></tr>
+            <tr><td>高销量陷阱</td><td>48%</td><td>2.1</td><td>销量高，但每单亏钱</td><td><span class="badge badge-red">立即降竞价或暂停</span></td></tr>
+            <tr><td>节日虚高</td><td>55%</td><td>1.8</td><td>节日CPC暴涨，短期现象</td><td><span class="badge badge-gray">节后3天再评估</span></td></tr>
+            <tr><td>彻底失效</td><td>80%+</td><td>&lt;1.3</td><td>广告在倒贴钱</td><td><span class="badge badge-red">当天停投</span></td></tr>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- ══ M3 QUADRANT ══ -->
+      <div class="page" id="page-m3-quadrant">
+        <div class="section">
+          <div class="section-title">四象限评估模型（CTR × CVR）</div>
+          <div class="quadrant-grid">
+            <div class="q-card q2">
+              <div class="q-label">Q2 — 低CTR · 高CVR</div>
+              <div class="q-title">页面问题广告</div>
+              <div class="q-desc">词义匹配（点了会买），但主图/价格让买家在搜索页就放弃了。属于"待拯救"，潜力大，不得直接否定。</div>
+              <div class="q-action">→ 优化主图 / 降价对比 / 标题前40字符含核心词</div>
+            </div>
+            <div class="q-card q1">
+              <div class="q-label">Q1 — 高CTR · 高CVR</div>
+              <div class="q-title">明星广告</div>
+              <div class="q-desc">CTR ≥ 0.3% 且 CVR ≥ 3% 且 ACOS &lt; 30%。词义精准，Listing完整，买家点了即买。</div>
+              <div class="q-action">→ 提预算30-50% + 提竞价15-20% + 移入核心精确组</div>
+            </div>
+            <div class="q-card q4">
+              <div class="q-label">Q4 — 低CTR · 低CVR</div>
+              <div class="q-title">完全失效广告</div>
+              <div class="q-desc">无效花费的主要来源。曝光买了，买家既不点也不买。72小时内必须处理，无任何理由可拖延。</div>
+              <div class="q-action">→ 72h内暂停或否定，预算100%转移至Q1</div>
+            </div>
+            <div class="q-card q3">
+              <div class="q-label">Q3 — 高CTR · 低CVR</div>
+              <div class="q-title">词义偏差广告</div>
+              <div class="q-desc">买家被吸引点入，但进入Listing后不买。词义偏移或详情页说服力不足。ACOS通常虚高。</div>
+              <div class="q-action">→ 拉搜索词报告 → 否定偏移词 → 检查A+/尺码表</div>
+            </div>
+          </div>
+          <div class="alert alert-blue"><span class="alert-icon">ℹ</span><div>象限图左下为低CTR低CVR（Q4），右上为高CTR高CVR（Q1）。气泡大小代表曝光量。</div></div>
+        </div>
+        <div class="section">
+          <div class="section-title">六维健康评分卡</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>评分维度</th><th>2分（健康）</th><th>1分（警戒）</th><th>0分（异常）</th></tr>
+            <tr><td><strong>曝光量（7天）</strong></td><td>&gt; 3,000</td><td>1,000-3,000</td><td>&lt; 1,000</td></tr>
+            <tr><td><strong>CTR</strong></td><td>&gt; 0.4%</td><td>0.2%-0.4%</td><td>&lt; 0.2%</td></tr>
+            <tr><td><strong>CVR</strong></td><td>&gt; 5%</td><td>2%-5%</td><td>&lt; 2%</td></tr>
+            <tr><td><strong>ACOS（EU）</strong></td><td>&lt; 25%</td><td>25%-40%</td><td>&gt; 40%</td></tr>
+            <tr><td><strong>ROAS（EU）</strong></td><td>&gt; 4.0</td><td>2.5-4.0</td><td>&lt; 2.5</td></tr>
+            <tr><td><strong>自然排名变化</strong></td><td>上升或持平</td><td>轻微下降</td><td>持续下滑</td></tr>
+          </table></div>
+          <div class="tbl-wrap"><table>
+            <tr><th>总分</th><th>健康状态</th><th>处理优先级</th></tr>
+            <tr><td><span class="badge badge-green">10-12分</span></td><td>健康，持续投入</td><td>低优先级，维持观察</td></tr>
+            <tr><td><span class="badge badge-blue">7-9分</span></td><td>亚健康，需优化</td><td>中优先级，本周处理</td></tr>
+            <tr><td><span class="badge badge-amber">4-6分</span></td><td>问题广告，需介入</td><td>高优先级，48小时内</td></tr>
+            <tr><td><span class="badge badge-red">0-3分</span></td><td>严重失效，立即止损</td><td><strong>最高优先级，当天</strong></td></tr>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- ══ M3 INSPECTION ══ -->
+      <div class="page" id="page-m3-inspection">
+        <div class="section">
+          <div class="section-title">周度广告健康巡检 SOP</div>
+          <div class="alert alert-blue"><span class="alert-icon">ℹ</span><div>每周一上午固定执行，为本周广告调整提供决策依据。完成时间不得晚于周一12:00。</div></div>
+          <div class="card">
+            <div class="formula-block"><span class="kw-if">Step 1</span> <span class="comment">【数据拉取】周一 09:00前</span>
+<span class="kw-arrow">→</span> 亚马逊后台：过去7天「搜索词报告」+「广告活动报告」
+<span class="kw-arrow">→</span> Xnurta：各ASIN广告组 ACOS/ROAS/花费/转化 汇总表
+
+<span class="kw-if">Step 2</span> <span class="comment">【四象限分类】15分钟内完成</span>
+<span class="kw-arrow">→</span> 按 CTR/CVR 将所有活跃广告组分入 Q1-Q4
+<span class="kw-arrow">→</span> 统计 Q4 组数量（本周必须处理的问题数）
+
+<span class="kw-if">Step 3</span> <span class="comment">【六维评分】对所有Q2/Q3/Q4组打分</span>
+<span class="kw-arrow">→</span> 总分 ≤ 6分 → 列入「本周处理清单」
+<span class="kw-arrow">→</span> 总分 ≤ 3分 → 标记「当天处理」
+
+<span class="kw-if">Step 4</span> <span class="comment">【执行调整】周一下午完成</span>
+<span class="kw-arrow">→</span> Q1组：提竞价+提预算，记录操作日志
+<span class="kw-arrow">→</span> Q2组：发起主图/价格优化任务，指定负责人+截止日期
+<span class="kw-arrow">→</span> Q3组：否词操作，更新否定词库
+<span class="kw-arrow">→</span> Q4组：暂停或否定，预算重新分配至Q1
+
+<span class="kw-if">Step 5</span> <span class="comment">【记录归档】填写「广告调整日志」</span>
+<span class="kw-arrow">→</span> 记录：调整前数据 / 调整动作 / 预期结果 / 下次复查日期
+<span class="kw-arrow">→</span> 禁止口头调整，所有操作必须留有书面记录</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ M4 INDEX ══ -->
+      <div class="page" id="page-m4-index">
+        <div class="section">
+          <div class="section-title">12种病态场景索引</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>#</th><th>场景名称</th><th>核心症状</th><th>危害等级</th><th>执行时限</th></tr>
+            <tr><td style="font-family:var(--mono);font-weight:600">01</td><td>高曝光·低点击</td><td>流量买了，买家不点</td><td><span class="badge badge-amber">中等</span></td><td>7天</td></tr>
+            <tr><td style="font-family:var(--mono);font-weight:600">02</td><td>低曝光·高转化</td><td>词太精但量太小</td><td><span class="badge badge-amber">中等</span></td><td>即时</td></tr>
+            <tr><td style="font-family:var(--mono);font-weight:600">03</td><td>高点击·低转化</td><td>流量进来，全数流失</td><td><span class="badge badge-red">高危</span></td><td>48h</td></tr>
+            <tr><td style="font-family:var(--mono);font-weight:600">04</td><td>高花费·零转化</td><td>纯烧钱，无任何产出</td><td><span class="badge badge-red">最高危</span></td><td>24h</td></tr>
+            <tr><td style="font-family:var(--mono);font-weight:600">05</td><td>ACOS持续超标不收敛</td><td>长期亏损，无改善趋势</td><td><span class="badge badge-red">高危</span></td><td>72h</td></tr>
+            <tr><td style="font-family:var(--mono);font-weight:600">06</td><td>曝光点击俱低</td><td>广告近乎隐形</td><td><span class="badge badge-amber">中等</span></td><td>3天</td></tr>
+            <tr><td style="font-family:var(--mono);font-weight:600">07</td><td>转化波动剧烈</td><td>数据不稳，无法决策</td><td><span class="badge badge-amber">需追踪</span></td><td>7天</td></tr>
+            <tr><td style="font-family:var(--mono);font-weight:600">08</td><td>自动广告失控</td><td>宽泛词大量消耗预算</td><td><span class="badge badge-red">高危</span></td><td>48h</td></tr>
+            <tr><td style="font-family:var(--mono);font-weight:600">09</td><td>节日后ACOS骤升</td><td>节日遗留CPC未清理</td><td><span class="badge badge-amber">需追踪</span></td><td>24h</td></tr>
+            <tr><td style="font-family:var(--mono);font-weight:600">10</td><td>竞品词ACOS极高</td><td>竞品防御战打法错误</td><td><span class="badge badge-amber">中等</span></td><td>7天</td></tr>
+            <tr><td style="font-family:var(--mono);font-weight:600">11</td><td>单词霸占全部预算</td><td>预算集中，其他词断投</td><td><span class="badge badge-amber">需追踪</span></td><td>即时</td></tr>
+            <tr><td style="font-family:var(--mono);font-weight:600">12</td><td>长尾词堆积词库臃肿</td><td>词库稀释预算效率低</td><td><span class="badge badge-gray">中等</span></td><td>月度</td></tr>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- ══ M4 IF-THEN ══ -->
+      <div class="page" id="page-m4-ifthen">
+        <div class="alert alert-red"><span class="alert-icon">⚑</span><div>所有If-Then公式以<strong>7天滚动数据</strong>为判断基准。数据不足7天，不触发任何调整。触发后必须在规定时限内执行。</div></div>
+
+        <div class="ifthen open">
+          <div class="ifthen-header" onclick="toggleIfthen(this)">
+            <div class="ifthen-title"><span class="badge badge-amber">01</span>高曝光 · 低点击 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 7天内处理</span></div>
+            <span class="ifthen-chevron">▼</span>
+          </div>
+          <div class="ifthen-body">
+            <div class="formula-block"><span class="kw-if">IF</span>  曝光(7天) &gt; 5,000 <span class="comment">（US: &gt;4,000）</span>
+<span class="kw-and">AND</span> CTR &lt; 0.2% <span class="comment">（US: &lt;0.25%）</span>
+<span class="kw-and">AND</span> 已持续 ≥ 7天
+
+<span class="kw-then">THEN</span> 按优先级执行：
+<span class="kw-arrow">→</span> 步骤1：对比同位置竞品主图，若明显弱势 → 提交换图任务（7天内）
+<span class="kw-arrow">→</span> 步骤2：价格比同页面前5名高 &gt;15% → 降价5%观察3天 <span class="comment">（US: 降价8%）</span>
+<span class="kw-arrow">→</span> 步骤3：拉搜索词报告，CTR &lt; 0.1% 的词 → 精确否定
+<span class="kw-arrow">→</span> 步骤4：14天内 CTR 仍 &lt; 0.2% → 暂停该广告组
+
+<span class="comment">禁止动作：不得通过提高竞价强行刷曝光位置</span></div>
+          </div>
+        </div>
+
+        <div class="ifthen">
+          <div class="ifthen-header" onclick="toggleIfthen(this)">
+            <div class="ifthen-title"><span class="badge badge-green">02</span>低曝光 · 高转化 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 立即处理</span></div>
+            <span class="ifthen-chevron">▼</span>
+          </div>
+          <div class="ifthen-body">
+            <div class="formula-block"><span class="kw-if">IF</span>  曝光(7天) &lt; 1,000
+<span class="kw-and">AND</span> CVR &gt; 5% <span class="comment">（US: &gt;4%）</span>
+<span class="kw-and">AND</span> 有 ≥ 2 笔转化
+
+<span class="kw-then">THEN</span>
+<span class="kw-arrow">→</span> 步骤1：竞价低于建议50%+ → 提至建议竞价×1.0
+<span class="kw-arrow">→</span> 步骤2：14:00前预算耗尽 → 预算提升40%
+<span class="kw-arrow">→</span> 步骤3：词组匹配升级为精确匹配，独立广告组保护
+<span class="kw-arrow">→</span> 步骤4：挖掘10-20个近义长尾词扩大覆盖
+<span class="kw-arrow">→</span> 步骤5：竞价策略切换"动态-升降" + 首页溢价 +30% <span class="comment">（US: +40%）</span>
+
+<span class="comment">禁止动作：不得因曝光低就否定此词，这是最有价值的词</span></div>
+          </div>
+        </div>
+
+        <div class="ifthen">
+          <div class="ifthen-header" onclick="toggleIfthen(this)">
+            <div class="ifthen-title"><span class="badge badge-red">03</span>高点击 · 低转化 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 48小时内处理</span></div>
+            <span class="ifthen-chevron">▼</span>
+          </div>
+          <div class="ifthen-body">
+            <div class="formula-block"><span class="kw-if">IF</span>  点击数(7天) &gt; 30 <span class="comment">（US: &gt;25）</span>
+<span class="kw-and">AND</span> CVR &lt; 1.5%
+<span class="kw-and">AND</span> 花费 &gt; $15 <span class="comment">（US: &gt;$20）</span>
+
+<span class="kw-then">THEN</span> 判断根因类型：
+
+<span class="comment">【类型A：词义偏移】</span>
+<span class="kw-arrow">→</span> 拉搜索词报告，查Top10词实际意图
+<span class="kw-arrow">→</span> 词义不符 → 精确否定，观察7天
+
+<span class="comment">【类型B：Listing说服力不足】</span>
+<span class="kw-arrow">→</span> 检查：Review&lt;5 / 无A+ / 缺尺码表 / 差评含"图不符实"
+<span class="kw-arrow">→</span> 修复后标注"待验证"，14天后复查CVR
+
+<span class="comment">【类型C：价格锚点失效】</span>
+<span class="kw-arrow">→</span> 加购比例 &lt; 5% 且 CTR &gt; 0.4% → 降价8-10%或设5%优惠券
+
+<span class="comment">终止：21天CVR持续&lt;1.5% → 暂停该广告组</span></div>
+          </div>
+        </div>
+
+        <div class="ifthen">
+          <div class="ifthen-header" onclick="toggleIfthen(this)">
+            <div class="ifthen-title"><span class="badge badge-red">04</span>高花费 · 零转化 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 24小时内 · 最高危</span></div>
+            <span class="ifthen-chevron">▼</span>
+          </div>
+          <div class="ifthen-body">
+            <div class="alert alert-red"><span class="alert-icon">⚑</span><div>花费 &gt; $30 且 0 转化 → 不经讨论，当天暂停，无任何理由延迟。</div></div>
+            <div class="formula-block"><span class="kw-if">IF</span>  花费(7天) &gt; $12 <span class="comment">（US: &gt;$18）</span>
+<span class="kw-and">AND</span> 转化 = 0
+
+<span class="kw-then">THEN</span> 分支判断：
+
+<span class="comment">【分支A：点击&gt;10 但CVR=0 → Listing根本性问题】</span>
+<span class="kw-arrow">→</span> 立即暂停广告（停止流量进入烂页面）
+<span class="kw-arrow">→</span> 48小时内修复Listing最严重缺陷
+<span class="kw-arrow">→</span> 修复后用$5/天小预算验证7天
+
+<span class="comment">【分支B：点击≤5 → 词义完全不匹配】</span>
+<span class="kw-arrow">→</span> 24小时内否定所有触发曝光的搜索词
+<span class="kw-arrow">→</span> 自动广告设置"紧密匹配"，关闭"关联商品"
+
+<span class="comment">【分支C：点击5-10 → 词义轻度偏移】</span>
+<span class="kw-arrow">→</span> 竞价降低40%，预算降至$3/天
+<span class="kw-arrow">→</span> 7天仍无转化 → 执行分支B止损</div>
+          </div>
+        </div>
+
+        <div class="ifthen">
+          <div class="ifthen-header" onclick="toggleIfthen(this)">
+            <div class="ifthen-title"><span class="badge badge-red">05</span>ACOS持续超标 · 不收敛 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 72小时内处理</span></div>
+            <span class="ifthen-chevron">▼</span>
+          </div>
+          <div class="ifthen-body">
+            <div class="formula-block"><span class="kw-if">IF</span>  ACOS(7天) &gt; 45% <span class="comment">（US: &gt;40%）</span>
+<span class="kw-and">AND</span> 连续 ≥ 2 个完整周期无改善
+
+<span class="kw-then">THEN</span> 三刀止血法：
+
+<span class="comment">【第一刀：词级手术】</span>
+<span class="kw-arrow">→</span> 花费前20% 且 转化后50% 的词 → 降价30%或暂停
+<span class="kw-arrow">→</span> 转化前20%的词 → 竞价提升10%
+
+<span class="comment">【第二刀：匹配方式收紧】</span>
+<span class="kw-arrow">→</span> 宽泛→词组 / ACOS&gt;50%的词组→精确
+<span class="kw-arrow">→</span> 自动广告仅保留"紧密匹配"
+
+<span class="comment">【第三刀：预算重分配】</span>
+<span class="kw-arrow">→</span> 该Campaign预算削减40%
+<span class="kw-arrow">→</span> 释放预算→转至ACOS&lt;25%的Campaign
+
+<span class="comment">复查：7天后若ACOS无改善 → 暂停整个Campaign，进入"问题品待处置"清单</span></div>
+          </div>
+        </div>
+
+        <div class="ifthen">
+          <div class="ifthen-header" onclick="toggleIfthen(this)">
+            <div class="ifthen-title"><span class="badge badge-amber">06</span>曝光点击俱低（广告隐形） <span style="font-weight:400;color:var(--text-3);font-size:12px">· 3天内处理</span></div>
+            <span class="ifthen-chevron">▼</span>
+          </div>
+          <div class="ifthen-body">
+            <div class="formula-block"><span class="kw-if">IF</span>  曝光(7天) &lt; 500
+<span class="kw-and">AND</span> 点击(7天) &lt; 5
+<span class="kw-and">AND</span> 广告已运行 &gt; 7天
+
+<span class="kw-then">THEN</span> 按序排查：
+<span class="kw-arrow">→</span> 排查1：竞价 &lt; 建议×60% → 提至建议×90%，观察3天
+<span class="kw-arrow">→</span> 排查2：词月搜索量 &lt; 300 → 该词需求不存在，直接暂停换词
+<span class="kw-arrow">→</span> 排查3：ASIN有Policy Warning/差评率&gt;15% → 先处理合规问题
+<span class="kw-arrow">→</span> 排查4：同关键词首页全为FBA+Review&gt;500 → 转长尾词或竞品定向</div>
+          </div>
+        </div>
+
+        <div class="ifthen">
+          <div class="ifthen-header" onclick="toggleIfthen(this)">
+            <div class="ifthen-title"><span class="badge badge-amber">07</span>转化波动剧烈 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 7天内追踪</span></div>
+            <span class="ifthen-chevron">▼</span>
+          </div>
+          <div class="ifthen-body">
+            <div class="formula-block"><span class="kw-if">IF</span>  相邻7天周期转化数差异 &gt; 50%
+<span class="kw-and">AND</span> 无节日/促销原因
+<span class="kw-and">AND</span> 连续 ≥ 3 个周期
+
+<span class="kw-then">THEN</span>
+<span class="kw-arrow">→</span> 检查1：FBM库存 &lt; 3件 → 补货，广告自动回稳
+<span class="kw-arrow">→</span> 检查2：过去21天价格变动 &gt; 3次 → 锁价14天建立基线
+<span class="kw-arrow">→</span> 检查3：竞品价格比你低 &gt; 20% → 跟价或转攻长尾词
+<span class="kw-arrow">→</span> 检查4：同组内跨品类词（如"连衣裙"+"礼服"）→ 拆分广告组</div>
+          </div>
+        </div>
+
+        <div class="ifthen">
+          <div class="ifthen-header" onclick="toggleIfthen(this)">
+            <div class="ifthen-title"><span class="badge badge-red">08</span>自动广告失控 · 词义偏移 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 48小时内处理</span></div>
+            <span class="ifthen-chevron">▼</span>
+          </div>
+          <div class="ifthen-body">
+            <div class="formula-block"><span class="kw-if">IF</span>  自动广告组 7天花费 &gt; $20
+<span class="kw-and">AND</span> 不相关词曝光占比 &gt; 40%
+<span class="kw-and">AND</span> ACOS &gt; 50%
+
+<span class="kw-then">THEN</span> 自动广告清洗四步法：
+<span class="kw-arrow">→</span> 步骤1：立即竞价降低50%，日预算降至$5
+<span class="kw-arrow">→</span> 步骤2：花费Top20词逐一判断：
+         有转化相关词 → 移至手动精确组 + 自动组否定
+         无转化相关词 → 自动组否定
+         不相关词 → 广告组级+Campaign级双重否定
+<span class="kw-arrow">→</span> 步骤3：关闭"宽泛匹配"和"关联商品"，仅保留"紧密匹配"
+<span class="kw-arrow">→</span> 步骤4：自动广告预算占比上限 ≤ 总预算20%
+
+<span class="comment">Xnurta规则：单词花费&gt;$8且转化=0 → 自动否定</span>
+<span class="comment">            单词ACOS&lt;20%且转化≥2 → 自动移入手动精确组</span></div>
+          </div>
+        </div>
+
+        <div class="ifthen">
+          <div class="ifthen-header" onclick="toggleIfthen(this)">
+            <div class="ifthen-title"><span class="badge badge-amber">09</span>节日后ACOS骤升 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 24小时内处理</span></div>
+            <span class="ifthen-chevron">▼</span>
+          </div>
+          <div class="ifthen-body">
+            <div class="formula-block"><span class="kw-if">IF</span>  节日结束后第3-7天
+<span class="kw-and">AND</span> ACOS 比节日前基准线高 &gt; 20个百分点
+<span class="kw-and">AND</span> 竞价未做调整
+
+<span class="kw-then">THEN</span>
+<span class="kw-arrow">→</span> 节日后24h内：所有提价词恢复至节日前水平
+<span class="kw-arrow">→</span> 节日专属词（如"Halloween dress"）→ 暂停或降价80%
+<span class="kw-arrow">→</span> 节日后3天：否定所有节日特定词（无长期搜索价值）
+<span class="kw-arrow">→</span> 节日后7天：自然排名若稳定上升 → 词有长期价值，保留
+                           若跌回原位 → 归入"季节词库"明年复用
+
+<span class="comment">提前防范：Xnurta规则：节日+3天后ACOS&gt;均值×1.3 → 自动降价20%</span></div>
+          </div>
+        </div>
+
+        <div class="ifthen">
+          <div class="ifthen-header" onclick="toggleIfthen(this)">
+            <div class="ifthen-title"><span class="badge badge-amber">10</span>竞品词ACOS极高 · 无转化 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 7天内处理</span></div>
+            <span class="ifthen-chevron">▼</span>
+          </div>
+          <div class="ifthen-body">
+            <div class="formula-block"><span class="kw-if">IF</span>  竞品ASIN定向组 ACOS &gt; 60% <span class="comment">（US: &gt;55%）</span>
+<span class="kw-and">AND</span> 7天花费 &gt; $14，转化 &lt; 1
+
+<span class="kw-then">THEN</span>
+<span class="kw-arrow">→</span> 判断1：强势竞品（Review&gt;200 + BSR前100）→ 放弃，转长尾词
+<span class="kw-arrow">→</span> 判断2：弱势竞品（Review&lt;50）但价格高于对方 → 先跟价再测7天
+<span class="kw-arrow">→</span> 判断3：品牌词 → 停止，品牌词竞价高且转化低
+
+<span class="comment">铁律：竞品词预算不超总预算10% / 单ASIN 7天无转化→立即暂停</span></div>
+          </div>
+        </div>
+
+        <div class="ifthen">
+          <div class="ifthen-header" onclick="toggleIfthen(this)">
+            <div class="ifthen-title"><span class="badge badge-blue">11</span>单词霸占全部预算 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 立即处理</span></div>
+            <span class="ifthen-chevron">▼</span>
+          </div>
+          <div class="ifthen-body">
+            <div class="formula-block"><span class="kw-if">IF</span>  单一词/组 消耗 &gt; Campaign总预算60%
+<span class="kw-and">AND</span> 其余词因预算耗尽频繁断投
+
+<span class="kw-then">THEN</span>
+<span class="kw-arrow">→</span> 步骤1：高消耗词独立为单独Campaign，设专属日预算
+<span class="kw-arrow">→</span> 步骤2：其余词恢复独立预算（独立Campaign或Ad Group）
+<span class="kw-arrow">→</span> 步骤3：评估霸占词价值：
+         ACOS&lt;25% → 独立Campaign全力投入
+         ACOS 25-40% → 设竞价上限防无上限消耗
+         ACOS&gt;40% → 降竞价40%，强制控制消耗比例</div>
+          </div>
+        </div>
+
+        <div class="ifthen">
+          <div class="ifthen-header" onclick="toggleIfthen(this)">
+            <div class="ifthen-title"><span class="badge badge-gray">12</span>长尾词堆积 · 词库臃肿 <span style="font-weight:400;color:var(--text-3);font-size:12px">· 月度清洗</span></div>
+            <span class="ifthen-chevron">▼</span>
+          </div>
+          <div class="ifthen-body">
+            <div class="formula-block"><span class="kw-if">IF</span>  单组词数 &gt; 50
+<span class="kw-and">AND</span> 60天内0点击词 &gt; 30%
+<span class="kw-and">AND</span> 整体ACOS &gt; 35%
+
+<span class="kw-then">THEN</span> ABC三级分类清洗（60天数据）：
+
+<span class="comment">A级保留：转化≥2 且 ACOS&lt;35% → 保留，考虑移入精确组</span>
+<span class="comment">B级观察：有点击0转化 且 花费&lt;$3 → 竞价降50%，再观察30天</span>
+<span class="comment">C级清除：60天0点击 → 暂停（不删除，保留数据）</span>
+<span class="comment">         60天花费&gt;$5且0转化 → 精确否定</span>
+
+<span class="kw-arrow">→</span> 清洗后上限：精确匹配≤20个/组，词组匹配≤30个/组
+<span class="kw-arrow">→</span> 每月第一个周一例行执行</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ M4 XNURTA ══ -->
+      <div class="page" id="page-m4-xnurta">
+        <div class="alert alert-green"><span class="alert-icon">✓</span><div>将高频 If-Then 判断交给自动化工具执行，人工精力聚焦在策略层决策。以下规则必须在 Xnurta 中配置并保持开启。</div></div>
+        <div class="section">
+          <div class="section-title">Xnurta 自动化规则配置清单</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>#</th><th>触发条件</th><th>自动执行动作</th><th>适用范围</th><th>优先级</th></tr>
+            <tr><td><span style="font-family:var(--mono);font-weight:600">R-01</span></td><td>单词7天花费 &gt; $8 且 转化=0</td><td>自动暂停该关键词</td><td>所有手动广告组</td><td><span class="badge badge-red">最高</span></td></tr>
+            <tr><td><span style="font-family:var(--mono);font-weight:600">R-02</span></td><td>单词7天 ACOS &gt; 60% 且 转化≤1</td><td>竞价自动降低30%</td><td>所有手动广告组</td><td><span class="badge badge-red">高</span></td></tr>
+            <tr><td><span style="font-family:var(--mono);font-weight:600">R-03</span></td><td>单词7天 ACOS &lt; 20% 且 转化≥2</td><td>竞价自动提升15%</td><td>所有手动广告组</td><td><span class="badge badge-green">高</span></td></tr>
+            <tr><td><span style="font-family:var(--mono);font-weight:600">R-04</span></td><td>自动广告 单词花费 &gt; $5 且 转化=0</td><td>自动否定该搜索词</td><td>所有自动广告组</td><td><span class="badge badge-red">高</span></td></tr>
+            <tr><td><span style="font-family:var(--mono);font-weight:600">R-05</span></td><td>自动广告 单词ACOS &lt; 20% 且 转化≥2</td><td>自动添加至手动精确组</td><td>所有自动广告组</td><td><span class="badge badge-green">高</span></td></tr>
+            <tr><td><span style="font-family:var(--mono);font-weight:600">R-06</span></td><td>Campaign日消耗达80%预算且时间&lt;18:00</td><td>暂停竞品定向广告组</td><td>Campaign级</td><td><span class="badge badge-amber">中</span></td></tr>
+            <tr><td><span style="font-family:var(--mono);font-weight:600">R-07</span></td><td>节日标记后第3天 ACOS &gt; 基准×1.3</td><td>竞价自动降低20%</td><td>节日Campaign</td><td><span class="badge badge-amber">中</span></td></tr>
+            <tr><td><span style="font-family:var(--mono);font-weight:600">R-08</span></td><td>任意广告组7天花费&gt;$30且转化=0</td><td>自动暂停整组+发送警报</td><td>全账户</td><td><span class="badge badge-red">兜底最高</span></td></tr>
+          </table></div>
+          <div class="alert alert-red"><span class="alert-icon">⚑</span><div>R-08 为全账户最高优先级兜底规则，任何情况下不得关闭。</div></div>
+        </div>
+      </div>
+
+      <!-- ══ M4 LOG ══ -->
+      <div class="page" id="page-m4-log">
+        <div class="alert alert-amber"><span class="alert-icon">!</span><div>每次执行 If-Then 动作后，必须填写以下日志。禁止口头调整不留记录。所有历史日志保存至团队共享文档，可追溯。</div></div>
+        <div class="section">
+          <div class="section-title">广告调整操作日志模板</div>
+          <div class="card">
+            <div class="formula-block">【广告调整日志】
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+日期：___________    操作人：___________
+ASIN：___________    Campaign名称：___________
+
+触发场景编号：
+□01高曝光低CTR  □02低曝光高CVR  □03高点击低CVR
+□04高花费零转化  □05ACOS不收敛  □06广告隐形
+□07转化波动     □08自动词失控   □09节日后遗症
+□10竞品词无效   □11预算集中     □12词库臃肿
+
+调整前数据（7天）：
+  曝光：_______  点击：_______  CTR：_______%
+  花费：$______  转化：_______  CVR：_______%
+  ACOS：_______%  ROAS：_______
+
+执行动作：
+  1. ___________________________________________
+  2. ___________________________________________
+  3. ___________________________________________
+
+预期结果：_______________________________________
+下次复查日期：___________
+
+复查结果：
+  □ 指标改善，继续优化路径
+  □ 无改善，升级处理（说明：___________）
+  □ 已暂停，预算转移至：___________
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">日志归档规范</div>
+          <div class="tbl-wrap"><table>
+            <tr><th>归档要素</th><th>要求</th></tr>
+            <tr><td>存储位置</td><td>团队共享文档「广告调整日志」→ 按月建立 Sheet</td></tr>
+            <tr><td>填写时间</td><td>执行调整操作后30分钟内必须完成填写</td></tr>
+            <tr><td>复查追踪</td><td>在共享日历标记复查日期，到期自动提醒负责人</td></tr>
+            <tr><td>月度复盘</td><td>每月最后一个周五汇总当月日志，提取最高频病态场景</td></tr>
+            <tr><td>责任归属</td><td>操作人字段为唯一责任人，结果好坏均与其挂钩</td></tr>
+          </table></div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<script>
+const pageTitles = {
+  'home': '首页 · 快速导航',
+  'm1-calendar': 'Module 1 · 服装全景日历',
+  'm1-lifecycle': 'Module 1 · 产品生命周期',
+  'm2-structure': 'Module 2 · 广告三层结构',
+  'm2-phases': 'Module 2 · 阶段性广告打法',
+  'm2-festival': 'Module 2 · 节日节点操作',
+  'm3-definition': 'Module 3 · 好坏广告定义',
+  'm3-acos': 'Module 3 · ACOS / ROAS参考线',
+  'm3-quadrant': 'Module 3 · 四象限评估模型',
+  'm3-inspection': 'Module 3 · 周度巡检SOP',
+  'm4-index': 'Module 4 · 病态场景索引',
+  'm4-ifthen': 'Module 4 · If-Then公式库',
+  'm4-xnurta': 'Module 4 · Xnurta规则配置',
+  'm4-log': 'Module 4 · 操作日志模板'
+};
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'" + id + "'")) {
+      btn.classList.add('active');
+    }
+  });
+  document.getElementById('pageTitle').textContent = pageTitles[id] || id;
+  document.querySelector('.main').scrollTo(0, 0);
+  window.scrollTo(0, 0);
+}
+
+function toggleIfthen(header) {
+  const card = header.closest('.ifthen');
+  card.classList.toggle('open');
+}
+
+function filterNav(val) {
+  const v = val.toLowerCase();
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.style.display = (!v || item.textContent.toLowerCase().includes(v)) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>
